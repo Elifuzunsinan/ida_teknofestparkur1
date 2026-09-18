@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<sdf version="1.6" xmlns:xacro="http://ros.org/wiki/xacro">
+  <world name="ida_parkur">
+<scene>
+  <sky>
+    <clouds>
+      <speed>12</speed>
+    </clouds>
+  </sky>
+  <fog>
+    <type>linear</type>
+    <color>0.1 0.2 0.3 1</color> <density>0.1</density>
+    <start>10</start>
+    <end>500</end>
+  </fog>
+</scene>    
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <xacro:include filename="$(find wave_gazebo)/world_models/ocean_waves/model.xacro"/>
+    <xacro:ocean_waves scale="2.5"/>
+
+    <xacro:include filename="$(find vrx_gazebo)/worlds/xacros/usv_wind_plugin.xacro"/>
+    <xacro:usv_wind_gazebo>
+      <wind_objs>
+        <wind_obj>
+          <name>wamv</name>
+          <link_name>wamv/base_link</link_name>
+          <coeff_vector>0.5 0.5 0.33</coeff_vector>
+        </wind_obj>
+      </wind_objs>
+    </xacro:usv_wind_gazebo>
+
+    <model name="kd_sol_1"><static>true</static><pose>20 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_1"><static>true</static><pose>20 -4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_2"><static>true</static><pose>40 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_2"><static>true</static><pose>40 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_3"><static>true</static><pose>60 20 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_3"><static>true</static><pose>60 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_4"><static>true</static><pose>80 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_4"><static>true</static><pose>80 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_5"><static>true</static><pose>100 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_5"><static>true</static><pose>100 -4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_6"><static>true</static><pose>120 -4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_6"><static>true</static><pose>120 -12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_7"><static>true</static><pose>140 -12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_7"><static>true</static><pose>140 -20 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_8"><static>true</static><pose>160 -4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_8"><static>true</static><pose>160 -12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_9"><static>true</static><pose>180 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_9"><static>true</static><pose>180 -4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_10"><static>true</static><pose>200 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_10"><static>true</static><pose>200 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_11"><static>true</static><pose>220 20 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_11"><static>true</static><pose>220 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+    <model name="kd_sol_12"><static>true</static><pose>240 12 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+    <model name="kd_sag_12"><static>true</static><pose>240 4 0.5 0 0 0</pose><link name="link"><visual name="v"><geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry><material><ambient>1 0.4 0 1</ambient><diffuse>1 0.4 0 1</diffuse></material></visual></link></model>
+
+  </world>
+</sdf>

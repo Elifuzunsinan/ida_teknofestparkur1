@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<robot name="teknofest_ida" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <link name="base_link">
+    <inertial><origin xyz="0 0 -0.3"/><mass value="29.1"/><inertia ixx="1.5" ixy="0" ixz="0" iyy="1.5" iyz="0" izz="1.5"/></inertial>
+    <visual><origin xyz="1.0 0.5 0"/><geometry><mesh filename="file:///home/elif/gazebo_usv_ws/src/usv_world/yuzeyi/ida_guncellenmis.stl" scale="0.001 0.001 0.001"/></geometry></visual>
+    <collision><origin xyz="1.0 0.5 0"/><geometry><mesh filename="file:///home/elif/gazebo_usv_ws/src/usv_world/yuzeyi/ida_guncellenmis.stl" scale="0.001 0.001 0.001"/></geometry></collision>
+  </link>
+
+  <link name="camera_link">
+    <inertial><mass value="0.1"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+    <visual><geometry><box size="0.05 0.05 0.05"/></geometry><material name="red"><color rgba="1 0 0 1"/></material></visual>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/><child link="camera_link"/>
+    <origin xyz="1.0 2.1 0.5" rpy="0 0 1.5708"/> 
+  </joint>
+
+  <link name="lidar_link">
+    <inertial><mass value="0.1"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+    <visual><geometry><box size="0.001 0.001 0.001"/></geometry></visual>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/><child link="lidar_link"/>
+    <origin xyz="1.0 1.9 0.6" rpy="0 0 1.5708"/>
+  </joint>
+
+  <link name="gps_link">
+    <inertial><mass value="0.1"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+    <visual><geometry><box size="0.001 0.001 0.001"/></geometry></visual>
+  </link>
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/><child link="gps_link"/>
+    <origin xyz="1.0 1.0 0.8" rpy="0 0 0"/>
+  </joint>
+
+  <link name="motor_sol">
+    <inertial><mass value="0.45"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+    <visual><geometry><box size="0.001 0.001 0.001"/></geometry></visual>
+  </link>
+  <joint name="motor_sol_baglanti" type="fixed">
+    <parent link="base_link"/><child link="motor_sol"/>
+    <origin xyz="0.75 -0.1 -0.05" rpy="1.5708 0 0"/>
+  </joint>
+
+  <link name="motor_sag">
+    <inertial><mass value="0.45"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+    <visual><geometry><box size="0.001 0.001 0.001"/></geometry></visual>
+  </link>
+  <joint name="motor_sag_baglanti" type="fixed">
+    <parent link="base_link"/><child link="motor_sag"/>
+    <origin xyz="1.25 -0.1 -0.05" rpy="1.5708 0 0"/>
+  </joint>
+
+  <gazebo>
+    <plugin name="usv_dynamics" filename="libusv_gazebo_dynamics_plugin.so">
+      <bodyName>base_link</bodyName><waterDensity>1025.0</waterDensity>
+      <boatArea>0.05</boatArea><boatWidth>0.4</boatWidth><boatLength>1.0</boatLength>
+      <wave_model>ocean_waves</wave_model>
+    </plugin>
+    <plugin name="ida_motor_kontrol" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>cmd_vel</commandTopic><robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="kedi_kamera">
+      <update_rate>30.0</update_rate>
+      <camera name="head"><horizontal_fov>1.396</horizontal_fov><image><width>800</width><height>600</height><format>R8G8B8</format></image><clip><near>0.02</near><far>300</far></clip></camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn><updateRate>0.0</updateRate>
+        <cameraName>kedi/kamera</cameraName><imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName><frameName>camera_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="lidar_link">
+    <sensor type="ray" name="hokuyo_sensor">
+      <visualize>false</visualize><update_rate>40</update_rate>
+      <ray><scan><horizontal><samples>720</samples><resolution>1</resolution><min_angle>-1.57</min_angle><max_angle>1.57</max_angle></horizontal></scan><range><min>0.10</min><max>30.0</max><resolution>0.01</resolution></range></ray>
+      <plugin name="gazebo_ros_laser" filename="libgazebo_ros_laser.so"><topicName>/scan</topicName><frameName>lidar_link</frameName></plugin>
+    </sensor>
+  </gazebo>
+  
+  <gazebo reference="gps_link">
+    <sensor type="gps" name="gps_sensor">
+      <always_on>true</always_on><update_rate>10.0</update_rate>
+      <plugin name="gps_plugin" filename="libgazebo_ros_gps_sensor.so"><topicName>/fix</topicName><frameName>gps_link</frameName></plugin>
+    </sensor>
+  </gazebo>
+</robot>

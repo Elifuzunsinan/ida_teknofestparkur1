@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<robot name="teknofest_ida" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 -0.3" rpy="0 0 0"/>
+      <mass value="29.1"/>
+      <inertia ixx="1.5" ixy="0.0" ixz="0.0" iyy="1.5" iyz="0.0" izz="1.5"/>
+    </inertial>
+    <visual>
+      <origin xyz="1.0 0.5 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///home/elif/gazebo_usv_ws/src/usv_world/yuzeyi/ida_guncellenmis.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="1.0 0.5 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file:///home/elif/gazebo_usv_ws/src/usv_world/yuzeyi/ida_guncellenmis.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="lidar_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="1.8 0.5 0.8" rpy="0 0 0"/>
+  </joint>
+
+  <link name="gps_link">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
+  </link>
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="1.0 0.5 0.8" rpy="0 0 0"/>
+  </joint>
+
+  <link name="motor_sol">
+    <inertial>
+      <mass value="0.45"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  <joint name="motor_sol_baglanti" type="fixed">
+    <parent link="base_link"/>
+    <child link="motor_sol"/>
+    <origin xyz="-0.15 0.15 -0.05" rpy="0 1.57 0"/>
+  </joint>
+
+  <link name="motor_sag">
+    <inertial>
+      <mass value="0.45"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  <joint name="motor_sag_baglanti" type="fixed">
+    <parent link="base_link"/>
+    <child link="motor_sag"/>
+    <origin xyz="-0.15 -0.15 -0.05" rpy="0 1.57 0"/>
+  </joint>
+
+  <!-- ============ GAZEBO PLUGINS ============ -->
+  <gazebo>
+    <plugin name="usv_dynamics" filename="libusv_gazebo_dynamics_plugin.so">
+      <bodyName>base_link</bodyName>
+      <waterLevel>0</waterLevel>
+      <waterDensity>1025.0</waterDensity>
+      <boatArea>0.05</boatArea>
+      <boatWidth>0.4</boatWidth>
+      <boatLength>1.0</boatLength>
+      <wave_model>ocean_waves</wave_model>
+      <xDotU>0.0</xDotU><yDotV>0.0</yDotV><nDotR>0.0</nDotR>
+      <xU>20.0</xU><xUU>0.0</xUU>
+      <yV>20.0</yV><yVV>0.0</yVV>
+      <zW>50.0</zW><kP>20.0</kP><mQ>20.0</mQ><nR>20.0</nR>
+    </plugin>
+    <plugin name="ida_motor_kontrol" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <robotBaseFrame>base_link</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+  <!-- ============ LiDAR ============ -->
+  <gazebo reference="lidar_link">
+    <sensor type="ray" name="hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/scan</topicName>
+        <frameName>lidar_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ============ GPS ============ -->
+  <gazebo reference="gps_link">
+    <sensor type="gps" name="gps_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <always_on>true</always_on>
+      <update_rate>10.0</update_rate>
+      <plugin name="gps_plugin" filename="libhector_gazebo_ros_gps.so">
+        <updateRate>10.0</updateRate>
+        <bodyName>gps_link</bodyName>
+        <frameId>gps_link</frameId>
+        <topicName>/fix</topicName>
+        <velocityTopicName>/fix_velocity</velocityTopicName>
+        <referenceLatitude>39.9334</referenceLatitude>
+        <referenceLongitude>32.8597</referenceLongitude>
+        <referenceAltitude>0.0</referenceAltitude>
+        <referenceHeading>0.0</referenceHeading>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>
