@@ -5,9 +5,9 @@ This repository contains the Parkur 1 simulation environment and vehicle models 
 
 ## 📹 Project Media & Simulation Videos:
 
-https://github.com/user-attachments/assets/99550199-1c04-4259-86a9-7cfd48d64eac
+https://github.com/user-attachments/assets/417e47ca-a608-45ed-aa99-b61fc2692316
 
-https://github.com/user-attachments/assets/420e50d2-776c-43ff-bce0-742a20f33341
+https://github.com/user-attachments/assets/116d3f96-541d-42ea-bf8e-0e879e086702
 
 ## 📂 Repository Structure
 
